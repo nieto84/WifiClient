@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/wifi"
     tools:context=".Inicio" >
 
     <TextView
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="71dp"
+        android:layout_marginTop="34dp"
         android:text="Wifi-Transfer"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -22,9 +23,9 @@
         android:id="@+id/conecta"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/config"
         android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="68dp"
         android:onClick="connect"
         android:text="Conecta" />
 
@@ -32,9 +33,9 @@
         android:id="@+id/config"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1"
-        android:layout_marginTop="44dp"
+        android:layout_below="@+id/conecta"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="105dp"
         android:onClick="configuration"
         android:text="Configuración" />
 

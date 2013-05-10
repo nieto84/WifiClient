@@ -25,6 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity 
+            android:name="com.example.wificlient.Config"
+            ></activity>
+        
+         <activity 
+            android:name="com.example.wificlient.Client"
+            ></activity>
+        
     </application>
 
 </manifest>
