@@ -2,89 +2,176 @@ package com.example.wificlient;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
-import com.example.cliente.R;
-
+import Class.Message;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class Recibe extends Activity{
-	
+
 
 	EditText textOut;
 	TextView textIn;
-	
+	Socket socket;
+	Tipo tipo;
+	//final String[] datos =new String[]{"Paraguay","Bolivia","Peru","Ecuador","Brasil","Colombia","Venezuela"};
+
+	String[] datos;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.recibe);
 
-		textOut = (EditText)findViewById(R.id.textout);
+		/*textOut = (EditText)findViewById(R.id.textout);
 		Button buttonSend = (Button)findViewById(R.id.send);
 		textIn = (TextView)findViewById(R.id.textin);
-		buttonSend.setOnClickListener(buttonSendOnClickListener);
+		buttonSend.setOnClickListener(buttonSendOnClickListener);*/
+
+		socket = SingletonSocket.getInstance();
+
+		ObjectInputStream ois;
+
+
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+			Message mensaje = new Message();
+			mensaje.setOrden("Esta es la Orden");
+			oos.writeObject(mensaje);
+
+		}
+		catch(Exception e) {
+			System.out.print("Whoops! It didn't work!\n");
+		}
+
+
+
+		try {
+			
+			ListView lista = (ListView) findViewById(R.id.listView1);
+		    ArrayList<Tipo> arraydir = new ArrayList<Tipo>();
+
+			ois = new ObjectInputStream(socket.getInputStream());
+			Object mensaje = ois.readObject();
+
+			if (mensaje instanceof Message){
+
+				//datos=((Message) mensaje).getDirectori();
+				//datos = {"",""};
+				File[] archivos = ((Message) mensaje).getDirectori();
+				
+				int i = 0;
+				while(archivos.length>i){
+					String nom =archivos[i].getName();
+					
+				if (archivos[i].isDirectory()){
+				        tipo = new Tipo(getResources().getDrawable(R.drawable.dir), nom, "");
+				        arraydir.add(tipo);
+				}
+					
+					i++;
+				}
+
+
+			}
+
+		}catch(Exception e){
+
+
+		}
+
+		
+		
+		
+		ArrayAdapter<String> adaptador =new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, datos);
+
+		ListView lstOpciones =(ListView)findViewById(R.id.listView1);
+		
+		lstOpciones.setAdapter(adaptador);
+
+		
+
+		lstOpciones.setOnItemClickListener (new  OnItemClickListener() {
+
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
+				// TODO Auto-generated method stub
+				
+
+			}	});
 	}
 
-	Button.OnClickListener buttonSendOnClickListener= new Button.OnClickListener(){
 
-		@Override
-		public void onClick(View arg0) {
-			// TODO Auto-generated method stub
-			Socket socket = null;
-			DataOutputStream dataOutputStream = null;
-			DataInputStream dataInputStream = null;
 
-			try {
-				socket = new Socket("10.0.2.2", 8888);
-				
-				
-				dataOutputStream = new DataOutputStream(socket.getOutputStream());
-				dataInputStream = new DataInputStream(socket.getInputStream());
-				dataOutputStream.writeUTF(textOut.getText().toString());
-				textIn.setText(dataInputStream.readUTF());
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public void exit(View arg){
+
+		finish();
+
+	}
+
+
+
+	public  void cd(){
+
+
+		ObjectInputStream ois;
+
+
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+			Message mensaje = new Message();
+			mensaje.setOrden("cd");
+			oos.writeObject(mensaje);
+
+		}
+		catch(Exception e) {
+			System.out.print("Whoops! It didn't work!\n");
+		}
+
+
+
+		try {
+
+			ois = new ObjectInputStream(socket.getInputStream());
+			Object mensaje = ois.readObject();
+
+			if (mensaje instanceof Message){
+
+				//datos=((Message) mensaje).getDirectori();
+
+
 			}
-			finally{
-				if (socket != null){
-					try {
-						socket.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
 
-				if (dataOutputStream != null){
-					try {
-						dataOutputStream.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+		}catch(Exception e){
 
-				if (dataInputStream != null){
-					try {
-						dataInputStream.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}};
 
+		}
+
+
+		ArrayAdapter<String> adaptador =new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, datos);
+
+		ListView lstOpciones =(ListView)findViewById(R.id.listView1);
+
+		lstOpciones.setAdapter(adaptador);
+
+
+	}
+	
 
 }
