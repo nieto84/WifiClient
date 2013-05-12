@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="62dp"
             android:layout_weight="0.31"
             android:onClick="back"
             android:src="@drawable/back" />
@@ -19,18 +19,19 @@
         <ImageView
             android:id="@+id/home"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.62"
+            android:layout_height="match_parent"
+            android:layout_weight="0.72"
             android:onClick="home"
             android:src="@drawable/home" />
 
         <ImageView
             android:id="@+id/exit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.41"
+            android:layout_height="match_parent"
+            android:layout_weight="0.34"
             android:onClick="exit"
             android:src="@drawable/exit" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +43,7 @@
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
     </ListView>
 
 </LinearLayout>

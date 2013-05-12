@@ -3,23 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/foto"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:adjustViewBounds="true"
-        android:background=""
-        android:cropToPadding="true"
-        android:scaleType="center" />
-
     <TextView
         android:id="@+id/nombre"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/foto"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_alignBottom="@+id/imageView1"
+        android:layout_marginLeft="37dp"
+        android:layout_toRightOf="@+id/imageView1"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/foto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        />
 
 </RelativeLayout>
