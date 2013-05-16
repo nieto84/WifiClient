@@ -1,43 +1,68 @@
 package Class;
 
-import java.io.File;
 import java.io.Serializable;
+import java.util.Vector;
 
-//	private final String[] lista =new String[]{"Paraguay.jpg","Bolivia","Peru","Ecuador","Brasil","Colombia","Venezuela"};
-	
+
 public class Message implements Serializable{
 
-/**
-*
-*/
-private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-private String orden;
-private String path;
-private File[] list;
+	private String orden;
+	private String path;
+	private String so;
+	private Vector<String> dire = new Vector<String>();
+	private Vector<String> docs = new Vector<String>();
 
-public String getOrden() {
-return orden;
-}
+	public String getOrden() {
+		return orden;
+	}
 
-public void setOrden(String orden) {
-this.orden = orden;
-}
+	public void setOrden(String orden) {
+		this.orden = orden;
+	}
 
-public String getPath() {
-return path;
-}
+	public String getPath() {
+		return path;
+	}
 
-public void setPath(String path) {
-this.path = path;
-}
+	public void setPath(String path) {
+		this.path = path;
+	}
 
-public File[] getList() {
-return list;
-}
+	public Vector<String> getDire() {
+		return dire;
+	}
 
-public void setList(File[] list) {
-this.list = list;
-}
+	public void setDire(Vector<String> dire) {
+		this.dire = dire;
+	}
 
+	public Vector<String> getDocs() {
+		return docs;
+	}
+
+	public void setDocs(Vector<String> docs) {
+		this.docs = docs;
+	}
+
+	public void addDire(String dire)
+	{
+		this.dire.add(dire);
+	}
+
+	public void addDocs(String docs)
+	{
+		this.docs.add(docs);
+	}
+	public String getSo() {
+		return so;
+	}
+
+	public void setSo(String so) {
+		this.so = so;
+	}
 }
