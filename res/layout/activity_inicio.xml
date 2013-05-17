@@ -6,38 +6,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/wifi"
+    android:background="@drawable/wifi1"
     tools:context=".Inicio" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/config"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
-        android:text="Wifi-Transfer"
-     	android:textColor="#FFFFFF"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_marginBottom="73dp"
+        android:onClick="configuration"
+        android:text="Configuración" />
 
     <Button
         android:id="@+id/conecta"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/config"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="68dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="64dp"
         android:onClick="connect"
         android:text="Conecta" />
-
-    <Button
-        android:id="@+id/config"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/conecta"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="105dp"
-        android:onClick="configuration"
-        android:text="Configuración" />
 
 </RelativeLayout>

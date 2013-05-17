@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -74,7 +76,7 @@ public class Recibe extends Activity{
 		try {
 
 			ois = new ObjectInputStream(socket.getInputStream());
-			 mensaje = ois.readObject();
+			mensaje = ois.readObject();
 
 			if (mensaje instanceof Message){
 
@@ -88,8 +90,7 @@ public class Recibe extends Activity{
 				Iterator<String> a = directoris.iterator();
 
 
-				Toast t1 = Toast.makeText(getApplicationContext(),archivos.get(1) ,Toast.LENGTH_LONG);
-				t1.show();
+
 
 				while (a.hasNext()){
 
@@ -161,7 +162,8 @@ public class Recibe extends Activity{
 					.setPositiveButton("Continuar",
 							new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							getFile(archivos.get(arg2)); // metodo que se debe implementar
+							getFile((Message)mensaje,archivos.get(arg2-directoris.size())); // metodo que se debe implementar
+
 						}
 					});
 					AlertDialog alert = builder.create();
@@ -180,22 +182,22 @@ public class Recibe extends Activity{
 
 	public  void cd(int arg2,Message mensajeAnt){
 
-	
+
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-			
+
 			Message mensaje = new Message();
 			mensaje.setOrden("CgetList");
-			
-	/*		if (mensaje.getSo().startsWith("win")){
-				mensaje.setPath(mensaje.getPath()+"\\"+directoris.get(arg2).toString());
-				
+
+			if (mensajeAnt.getSo().startsWith("win")){
+				mensaje.setPath(mensajeAnt.getPath()+"\\"+directoris.get(arg2));
+
 			}else{
-				
-				mensaje.setPath(mensaje.getPath()+"/"+directoris.get(arg2).toString());
-			}*/
-			mensaje.setPath(mensajeAnt.getPath()+"/"+directoris.get(arg2));
-			
+
+				mensaje.setPath(mensajeAnt.getPath()+"/"+directoris.get(arg2));
+			}
+			//mensaje.setPath(mensajeAnt.getPath()+"/"+directoris.get(arg2));
+
 			oos.writeObject(mensaje);
 
 		}
@@ -225,7 +227,82 @@ public class Recibe extends Activity{
 	}
 
 
-	public void getFile(String fichero){
+
+	public void cdAnt(Message mensajeAnt){
+
+
+		String pathAnt = "";
+		int x=0;
+		String[] path;
+
+
+		if (mensajeAnt.getSo().startsWith("win")){
+			path = mensajeAnt.getPath().split("\\");
+
+		}else{
+
+			path = mensajeAnt.getPath().split("/");
+		}
+
+
+
+		while (x<path.length-1){
+
+			pathAnt = pathAnt+path[x]+"/";
+
+			x++;
+		}
+
+
+		Toast t1 = Toast.makeText(getApplicationContext(),"HOLA 2" ,Toast.LENGTH_LONG);
+		t1.show();
+
+		Log.i("aa",pathAnt);
+
+
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+
+			Message mensaje = new Message();
+			mensaje.setOrden("CgetList");
+
+			mensaje.setPath(pathAnt);
+
+			oos.writeObject(mensaje);
+
+		}
+		catch(Exception e) {
+			System.out.print("Whoops! It didn't work!\n");
+		}
+
+		try {
+
+			ois = new ObjectInputStream(socket.getInputStream());
+			mensaje = ois.readObject();
+
+			if (mensaje instanceof Message){
+
+				archivos = ((Message) mensaje).getDocs();
+
+				directoris = ((Message) mensaje).getDire();
+
+				recargaVista(archivos,directoris);
+
+			}
+
+		}catch(Exception e){
+
+
+		}
+
+	}
+
+
+
+
+	public void getFile(Message mensajeAnt, String fichero){
+		
+		
 		try
 		{
 			// Se envía un mensaje de petición de fichero.
@@ -235,38 +312,57 @@ public class Recibe extends Activity{
 			mensaje.setOrden("CgetFile");
 			mensaje.setPath(fichero);
 
-			//Files files = new Files();
-			//files.setNombreFichero(fichero);
+	
+			if (mensajeAnt.getSo().startsWith("win")){
+				mensaje.setPath(mensajeAnt.getPath()+"\\"+fichero);
+
+			}else{
+
+				mensaje.setPath(mensajeAnt.getPath()+"/"+fichero);
+		
+			}
+	
+			
+			File ruta_sd = Environment.getExternalStorageDirectory();
+
+			File f = new File(ruta_sd.getAbsolutePath(),fichero);
 
 			oos.writeObject(mensaje);
-
+			
 			// Se abre un fichero para empezar a copiar lo que se reciba.
-			FileOutputStream fos = new FileOutputStream(mensaje.getPath()+ "_copia");
-
+			FileOutputStream fos = new FileOutputStream(f);
+			Log.i("aa","aqui0");
 			// Se crea un ObjectInputStream del socket para leer los mensajes
 			// que contienen el fichero.
-			ObjectInputStream ois = new ObjectInputStream(socket
-					.getInputStream());
+			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+			Log.i("aa","aqui");
 			Files mensajeRecibido;
 			Object mensajeAux;
 			do
 			{
+			
 				// Se lee el mensaje en una variabla auxiliar
 				mensajeAux = ois.readObject();
 
 				// Si es del tipo esperado, se trata
-				if (mensajeAux instanceof Files)
-				{
+				if (mensajeAux instanceof Files){
+
+					Log.i("aa","aqui1");
 					mensajeRecibido = (Files) mensajeAux;
-					// Se escribe en el ficher
-					fos.write(mensajeRecibido.getContenidoFichero(), 0,
-							mensajeRecibido.getBytesValidos());
-				} else
-				{
+					
+					Log.i("aa","aqui2");
+					// Se escribe en el fichero
+					fos.write(mensajeRecibido.getContenidoFichero(), 0,mensajeRecibido.getBytesValidos());
+					
+					Log.i("aa","aqui3");
+				} else{
 					// Si no es del tipo esperado, se marca error y se termina
 					// el bucle
 					System.err.println("Mensaje no esperado "
 							+ mensajeAux.getClass().getName());
+					//Toast t1 = Toast.makeText(getApplicationContext(),"Mensaje no espeado" ,Toast.LENGTH_LONG);
+					//t1.show();
+					
 					break;
 				}
 			} while (!mensajeRecibido.isUltimoMensaje());
@@ -278,7 +374,11 @@ public class Recibe extends Activity{
 
 		} catch (Exception e)
 		{
-			e.printStackTrace();
+
+			Toast t1 = Toast.makeText(getApplicationContext(),"Error al recibir el archivo" ,Toast.LENGTH_LONG);
+			t1.show();
+
+			//e.printStackTrace();
 		}
 	}
 
@@ -298,6 +398,14 @@ public class Recibe extends Activity{
 	}
 
 
+	public void back(View arg){
+
+		cdAnt((Message)mensaje);
+
+	}
+
+
+
 	public void recargaVista(final Vector<String> archivos, final Vector<String> directoris){
 
 		arraytipo = new ArrayList<Tipo>();
@@ -308,8 +416,6 @@ public class Recibe extends Activity{
 			Iterator<String> a = directoris.iterator();
 
 
-			Toast t1 = Toast.makeText(getApplicationContext(),archivos.get(1) ,Toast.LENGTH_LONG);
-			t1.show();
 
 			while (a.hasNext()){
 
@@ -357,20 +463,14 @@ public class Recibe extends Activity{
 		// Lo aplico
 		lista.setAdapter(adapter);
 
-		
+
 		lista.setOnItemClickListener (new  OnItemClickListener() {
 
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,long arg3) {
-				
-				
-				Toast t1 = Toast.makeText(getApplicationContext(),String.valueOf(arg2) ,Toast.LENGTH_LONG);
-				t1.show();
 
 
-				if (arg2<=directoris.size()){
-					
-					
+				if (arg2<=directoris.size()){				
 
 					cd(arg2,(Message)mensaje);
 
@@ -390,7 +490,7 @@ public class Recibe extends Activity{
 					.setPositiveButton("Continuar",
 							new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							getFile(archivos.get(arg2)); // metodo que se debe implementar
+							getFile((Message)mensaje,archivos.get(arg2-directoris.size())); // metodo que se debe implementar
 						}
 					});
 					AlertDialog alert = builder.create();
@@ -398,8 +498,8 @@ public class Recibe extends Activity{
 				}
 			}
 		});
-	
-		
+
+
 
 	}
 

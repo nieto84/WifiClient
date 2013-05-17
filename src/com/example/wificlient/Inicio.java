@@ -84,6 +84,8 @@ public class Inicio extends Activity {
 
 				// show it
 				alertDialog.show();
+				
+				//socket.close();
 
 			}
 
@@ -101,7 +103,6 @@ public class Inicio extends Activity {
 		return ((WifiManager) contexto.getSystemService(Context.WIFI_SERVICE))
 				.isWifiEnabled();
 	}
-
 
 
 
