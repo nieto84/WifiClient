@@ -17,20 +17,21 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class Inicio extends Activity {
 
-	Socket socket;
+	private Socket socket;
 
-	Button conecta,config;
+	private ImageView conecta,config;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inicio);
 
-		conecta=(Button)findViewById(R.id.conecta);
-		config=(Button)findViewById(R.id.config);
+		conecta=(ImageView)findViewById(R.id.conecta);
+		config=(ImageView)findViewById(R.id.config);
 	}
 
 

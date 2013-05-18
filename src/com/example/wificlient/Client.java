@@ -6,37 +6,37 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class Client extends Activity{
 
-	Socket socket;
+	private Socket socket;
+	private ImageView enviar, recibir;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.conecta);
-		
-		
-		socket = SingletonSocket.getInstance();
-		
-		
-		Toast t3 = Toast.makeText(getApplicationContext(),"incoming "+String.valueOf(socket.getRemoteSocketAddress()) ,Toast.LENGTH_LONG);
-		t3.show();
-		
 
-		
-		
-		}
+		enviar = (ImageView)findViewById(R.id.envia);
+		recibir = (ImageView)findViewById(R.id.recibe);
 
 
-	
+	}
+
+
+
 	public void recibe(View arg){
-	
-	
-		
+
 		Intent r = new Intent(this,Recibe.class);
 		startActivity(r);
-		
-		
+
+
+	}
+
+	public void envia(View arg){
+
+		Intent o = new Intent(this,Origen.class);
+		startActivity(o);
 	}
 }

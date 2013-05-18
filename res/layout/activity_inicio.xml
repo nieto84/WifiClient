@@ -6,27 +6,42 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/wifi1"
     tools:context=".Inicio" >
 
-    <Button
+    
+    
+    
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="Wifi Transfer"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    
+    
+    <ImageView
         android:id="@+id/config"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="73dp"
+        android:layout_marginBottom="52dp"
         android:onClick="configuration"
-        android:text="Configuración" />
+        android:src="@drawable/settings" />
 
-    <Button
+    <ImageView
         android:id="@+id/conecta"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/config"
         android:layout_alignLeft="@+id/config"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="64dp"
+        android:layout_marginBottom="54dp"
         android:onClick="connect"
-        android:text="Conecta" />
+        android:src="@drawable/conn" />
+
 
 </RelativeLayout>

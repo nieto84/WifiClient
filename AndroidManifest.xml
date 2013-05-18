@@ -6,8 +6,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="17" />
@@ -26,19 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity 
-            android:name="com.example.wificlient.Config"
-            ></activity>
-        
-         <activity 
-            android:name="com.example.wificlient.Client"
-            ></activity>
-         
-              <activity 
-            android:name="com.example.wificlient.Recibe"
-            ></activity>
-        
+        <activity android:name="com.example.wificlient.Config" >
+        </activity>
+        <activity android:name="com.example.wificlient.Client" >
+        </activity>
+        <activity android:name="com.example.wificlient.Recibe" >
+        </activity>
+        <activity android:name="com.example.wificlient.Envia" >
+        </activity>
+          <activity android:name="com.example.wificlient.Origen" >
+        </activity>
     </application>
 
 </manifest>
