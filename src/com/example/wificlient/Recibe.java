@@ -308,8 +308,7 @@ public class Recibe extends Activity{
 					try
 					{
 						// Se envía un mensaje de petición de fichero.
-						ObjectOutputStream oos = new ObjectOutputStream(socket
-								.getOutputStream());
+						ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 						Message mensaje = new Message();
 						mensaje.setOrden("CgetFile");
 						mensaje.setPath(fichero);
@@ -359,7 +358,7 @@ public class Recibe extends Activity{
 							} else{
 								// Si no es del tipo esperado, se marca error y se termina
 								// el bucle
-								System.err.println("Mensaje no esperado "
+								System.err.println("Mensaje no esperado"
 										+ mensajeAux.getClass().getName());
 								//Toast t1 = Toast.makeText(getApplicationContext(),"Mensaje no espeado" ,Toast.LENGTH_LONG);
 								//t1.show();

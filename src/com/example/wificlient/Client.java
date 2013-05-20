@@ -21,6 +21,7 @@ public class Client extends Activity{
 		enviar = (ImageView)findViewById(R.id.envia);
 		recibir = (ImageView)findViewById(R.id.recibe);
 
+		socket = SingletonSocket.getInstance();
 
 	}
 

@@ -1,21 +1,27 @@
 package com.example.wificlient;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import Class.Files;
 import Class.Message;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +30,10 @@ import android.widget.Toast;
 public class Origen extends Activity {
 
 
+	 private FileInputStream fileInputStream;
+	 private BufferedInputStream bufferedInputStream;
+	 private OutputStream outputStream;
+	
 	private static int SELECT_PICTURE = 2;
 	private Socket socket;
 	
@@ -71,19 +81,22 @@ public class Origen extends Activity {
 			//cogemos la imagen seleccionada por el usuario
 			Uri selectedImage = data.getData();
 			 String path = getRealPathFromURI(selectedImage);
+			 File file =new File(path);
+			 
+				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+
+				Message mensaje = new Message();
+				mensaje.setOrden("CputFile");
+				mensaje.setPath(selectedImage.getLastPathSegment());
+				oos.writeObject(mensaje);
 
 			//is =  (FileInputStream) getContentResolver().openInputStream(selectedImage);
 
-
+/*
 				Toast t2= Toast.makeText(getApplicationContext(),path+" ",Toast.LENGTH_LONG);
 				t2.show();
 			 
-			ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-
-			Message mensaje = new Message();
-			mensaje.setOrden("CputFile");
-			mensaje.setPath(selectedImage.getLastPathSegment());
-		oos.writeObject(mensaje);
+	
 
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
@@ -174,7 +187,100 @@ public class Origen extends Activity {
 				Toast t1 = Toast.makeText(getApplicationContext(),e.getMessage()+" a",Toast.LENGTH_LONG);
 				t1.show();
 
-			}
+			}*/
+	/*
+				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+				Message mensaje = new Message();
+				mensaje.setOrden("CputFile");
+				mensaje.setPath(selectedImage.getLastPathSegment());
+				oos.writeObject(mensaje);
+				
+				// Se abre el fichero.
+				FileInputStream fis = new FileInputStream(path);
+
+				// Se instancia y rellena un mensaje de envio de fichero
+				Files files = new Files();
+				files.setNombreFichero(selectedImage.getLastPathSegment());
+
+				// Se leen los primeros bytes del fichero en un campo del mensaje
+				int leidos = fis.read(files.getContenidoFichero());
+
+				// Bucle mientras se vayan leyendo datos del fichero
+				while (leidos > -1)
+				{
+					// Se rellena el número de bytes leidos
+					files.setBytesValidos(leidos);
+					
+
+					// Si no se han leido el máximo de bytes, es porque el fichero
+					// se ha acabado y este es el último mensaje
+					if (leidos <Files.LONGITUD_MAXIMA)
+					{
+						// Se marca que este es el último mensaje
+						files.setUltimoMensaje(true);
+						enviadoUltimo=true;
+					}
+					else files.setUltimoMensaje(false);
+
+
+					oos.writeObject(files);
+
+					// Si es el último mensaje, salimos del bucle.
+					if (files.isUltimoMensaje())
+						break;
+
+					// Se crea un nuevo mensaje
+					files = new Files();
+					files.setNombreFichero(selectedImage.getLastPathSegment());
+
+					// y se leen sus bytes.
+					leidos = fis.read(files.getContenidoFichero());
+					
+					//System.out.println(convertToHex(files.getContenidoFichero()));
+					
+					
+				}
+
+				if (enviadoUltimo==false)
+				{
+					files.setUltimoMensaje(true);
+					files.setBytesValidos(0);
+					oos.writeObject(files);
+
+				}
+		}catch(Exception e){
+
+					Toast t1 = Toast.makeText(getApplicationContext(),e.getMessage()+"a",Toast.LENGTH_LONG);
+					t1.show();
+
+				}
+		
+		*/
+			 
+			 
+			 byte[] mybytearray = new byte[(int) file.length()]; //create a byte array to file
+			 
+		     fileInputStream = new FileInputStream(file);
+		     bufferedInputStream = new BufferedInputStream(fileInputStream); 
+		 
+		     bufferedInputStream.read(mybytearray, 0, mybytearray.length); //read the file
+		 
+		     outputStream = socket.getOutputStream();
+		 
+		     outputStream.write(mybytearray, 0, mybytearray.length); //write file to the output stream byte by byte
+		    // outputStream.flush();
+		     bufferedInputStream.close();
+		     outputStream.close();
+		     
+		     
+		    	      
+		    } catch (UnknownHostException e) {
+		     e.printStackTrace();
+		    } catch (IOException e) {
+		     e.printStackTrace();
+		    }
+		
+		
 		}
 	
 	public String getRealPathFromURI(Uri contentUri) {
