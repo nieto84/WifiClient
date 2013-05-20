@@ -74,7 +74,7 @@ public class Inicio extends Activity {
 
 				// set dialog message
 				alertDialogBuilder.setTitle("Error en la conexión");
-				alertDialogBuilder.setMessage(e.getMessage()+"Error indeterminado vuelva a conectar" );
+				alertDialogBuilder.setMessage("Error indeterminado vuelva a conectar (puede que el servidor este desconectado" );
 				alertDialogBuilder.setCancelable(false).
 				setPositiveButton("OK", new DialogInterface.OnClickListener() {public void onClick(DialogInterface dialog,int id)
 				{} });//}

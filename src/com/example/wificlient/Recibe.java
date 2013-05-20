@@ -1,25 +1,19 @@
 package com.example.wificlient;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
-
 import Class.Files;
 import Class.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,8 +22,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -349,10 +341,8 @@ public class Recibe extends Activity{
 						Object mensajeAux;
 
 
-
 						do
 						{
-
 
 							// Se lee el mensaje en una variabla auxiliar
 							mensajeAux = ois.readObject();
@@ -406,9 +396,7 @@ public class Recibe extends Activity{
 
 		Toast t1 = Toast.makeText(getApplicationContext(),"Transferencia finalizada con éxito",Toast.LENGTH_LONG);
 		t1.show();
-		
-		//reiniciarActivity(this);
-		
+			
 
 	}
 
@@ -527,8 +515,6 @@ public class Recibe extends Activity{
 				}
 			}
 		});
-
-
 
 	}
 
