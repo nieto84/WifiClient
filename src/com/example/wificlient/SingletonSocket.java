@@ -27,6 +27,17 @@ public class SingletonSocket {
 
 		return socket;
 	}
+	
+	public static void removeInstance(){
+		if(socket!=null)
+			try {
+				socket.close();
+				socket=null;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
 			
 
 }

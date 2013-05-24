@@ -24,13 +24,7 @@
             android:onClick="home"
             android:src="@drawable/home" />
 
-        <ImageView
-            android:id="@+id/exit"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.34"
-            android:onClick="exit"
-            android:src="@drawable/exit" />
+     
 
     </LinearLayout>
 

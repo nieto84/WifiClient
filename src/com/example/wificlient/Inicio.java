@@ -65,6 +65,7 @@ public class Inicio extends Activity {
 				String ports = prefs.getString("port","");	
 				int port = Integer.parseInt(ports);
 				//DESCOMENTAR----------------------------------------------------------------------------
+				SingletonSocket.removeInstance();
 				SingletonSocket.getInstance(ip,port);
 				Intent client = new Intent(this,Client.class);
 				startActivity(client);
@@ -74,7 +75,7 @@ public class Inicio extends Activity {
 
 				// set dialog message
 				alertDialogBuilder.setTitle("Error en la conexión");
-				alertDialogBuilder.setMessage("Error indeterminado vuelva a conectar (puede que el servidor este desconectado" );
+				alertDialogBuilder.setMessage("Verifica la configuración del dispositivo y comprueba que el servidor esté activo");
 				alertDialogBuilder.setCancelable(false).
 				setPositiveButton("OK", new DialogInterface.OnClickListener() {public void onClick(DialogInterface dialog,int id)
 				{} });//}

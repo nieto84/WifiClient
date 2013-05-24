@@ -22,6 +22,26 @@
             android:summary="Introduce aqui el puerto de conexion"
             android:title="Port" />
     </PreferenceCategory>
+    
+     <PreferenceCategory android:title="User" >
+
+
+        <EditTextPreference
+            android:dialogTitle="Introduce valor"
+            android:key="user"
+            android:summary="Introduce aqui el nombre de usuario"
+            android:title="User" />
+    </PreferenceCategory>
+    
+        <PreferenceCategory android:title="Password" >
+
+
+        <EditTextPreference
+            android:dialogTitle="Introduce valor"
+            android:key="password"
+            android:summary="Introduce aqui la clave de acceso"
+            android:title="Password" />
+    </PreferenceCategory>
 
 
 </PreferenceScreen>

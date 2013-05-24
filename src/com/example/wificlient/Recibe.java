@@ -396,7 +396,6 @@ public class Recibe extends Activity{
 		Toast t1 = Toast.makeText(getApplicationContext(),"Transferencia finalizada con éxito",Toast.LENGTH_LONG);
 		t1.show();
 			
-
 	}
 
 
