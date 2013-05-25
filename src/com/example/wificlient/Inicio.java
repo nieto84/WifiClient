@@ -1,10 +1,13 @@
 package com.example.wificlient;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.prefs.Preferences;
 
+import Class.Message;
+import Class.Usuario;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,6 +40,8 @@ public class Inicio extends Activity {
 
 	public void connect(View arg) throws UnknownHostException, IOException{
 		
+		
+		//Compruevo conexion wifi
 		if (estadoWiFi(this)){
 
 			
@@ -60,16 +65,54 @@ public class Inicio extends Activity {
 
 
 			try {	
+				
+				//Recojo los parametros de configuracion para la conexion con el servidor
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 				String ip =  prefs.getString("ip", "");
 				String ports = prefs.getString("port","");	
+				String usuario=prefs.getString("user", "");
+				String password = prefs.getString("password","");
 				int port = Integer.parseInt(ports);
-				//DESCOMENTAR----------------------------------------------------------------------------
+				
+				Usuario u = new Usuario();
+				
+				u.setPass(password);
+				u.setUser(usuario);			
+			
 				SingletonSocket.removeInstance();
 				SingletonSocket.getInstance(ip,port);
 				Intent client = new Intent(this,Client.class);
 				startActivity(client);
 
+				
+				
+				/*
+				try {
+					ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+					
+				
+					oos.writeObject(u);
+					Intent client = new Intent(this,Client.class);
+					startActivity(client);
+
+				}catch(Exception e){
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+					
+					alertDialogBuilder.setTitle("Error en la conexión");
+					alertDialogBuilder.setMessage("Verifica usuario y password");
+					alertDialogBuilder.setCancelable(false).
+					setPositiveButton("OK", new DialogInterface.OnClickListener() {public void onClick(DialogInterface dialog,int id)
+					{} });
+					
+					AlertDialog alertDialog = alertDialogBuilder.create();
+
+					// show it
+					alertDialog.show();
+					
+				}
+				*/
+				
+				
 			}catch(Exception e){
 				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -105,7 +148,5 @@ public class Inicio extends Activity {
 		return ((WifiManager) contexto.getSystemService(Context.WIFI_SERVICE))
 				.isWifiEnabled();
 	}
-
-
 
 }

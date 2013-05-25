@@ -34,7 +34,6 @@ public class Origen extends Activity {
 	private FileInputStream fileInputStream;
 	private BufferedInputStream bufferedInputStream;
 	private OutputStream outputStream;
-	private static int BACK =1;
 	private static int SELECT_PICTURE = 2;
 	private Socket socket;
 
@@ -95,13 +94,7 @@ public class Origen extends Activity {
 			mensaje.setPath(selectedImage.getLastPathSegment());
 			oos.writeObject(mensaje);
 
-			//is =  (FileInputStream) getContentResolver().openInputStream(selectedImage);
 
-			/*
-				Toast t2= Toast.makeText(getApplicationContext(),path+" ",Toast.LENGTH_LONG);
-				t2.show();
-
-			 */
 
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
@@ -114,12 +107,7 @@ public class Origen extends Activity {
 				if (((Message) mensaje2).getOrden().equals("SgetFile")){
 
 					FileInputStream is = new FileInputStream(path);
-					// Se instancia y rellena un mensaje de envio de fichero
-					Files files = new Files();
-					files.setNombreFichero(((Message) mensaje2).getPath()+"/"+selectedImage.getLastPathSegment());
-
-
-
+				
 
 					byte[] mybytearray = new byte[(int) file.length()]; //create a byte array to file
 
@@ -174,25 +162,5 @@ public class Origen extends Activity {
 
 			return cursor.getString(column_index);
 		}
-
-
-		private static String convertToHex(byte[] data) {
-			StringBuffer buf = new StringBuffer();
-			for (int i = 0; i < data.length; i++) {
-				int halfbyte = (data[i] >>> 4) & 0x0F;
-				int two_halfs = 0;
-				do {
-					if ((0 <= halfbyte) && (halfbyte <= 9))
-						buf.append((char) ('0' + halfbyte));
-					else
-						buf.append((char) ('a' + (halfbyte - 10)));
-					halfbyte = data[i] & 0x0F;
-				} while(two_halfs++ < 1);
-			}
-			return buf.toString();
-		}
-
-
-
 
 	}

@@ -29,17 +29,19 @@ public class Client extends Activity{
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-	    	
-	    	try {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+
+			try {
 				socket.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}catch (Exception e){
+
 			}
-	       
-	    }
-	    return super.onKeyDown(keyCode, event);
+
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 

@@ -1,10 +1,14 @@
 package com.example.wificlient;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -14,6 +18,7 @@ import Class.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,18 +40,21 @@ public class Envia extends Activity{
 	private File f = new File("/");
 	private FileInputStream is;
 	private Socket socket;
+	private FileInputStream fileInputStream;
+	private BufferedInputStream bufferedInputStream;
+	private OutputStream outputStream;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.envia);
 
-		
+
 		socket = SingletonSocket.getInstance();
 
 		lista = (ListView) findViewById(R.id.listView1);
-		
 
+		//recojo todos los archivos y directorios de la path indicada
 		File[] listfiles;
 
 		listfiles = f.listFiles();
@@ -73,8 +81,6 @@ public class Envia extends Activity{
 		Iterator<String> a = directoris.iterator();
 
 
-
-
 		while (a.hasNext()){
 
 			String dire = a.next();
@@ -84,6 +90,7 @@ public class Envia extends Activity{
 
 		}
 
+		//Creo los objetos tipo y les asigno la imagen correspondiente segun extensión.
 		while(archivos.size()>i){
 
 
@@ -111,7 +118,7 @@ public class Envia extends Activity{
 
 
 		adapter = new Adapter(this, arraytipo);   
-		// Lo aplico
+		//Muestro la lista
 		lista.setAdapter(adapter);
 
 		lista.setOnItemClickListener (new  OnItemClickListener() {
@@ -153,45 +160,52 @@ public class Envia extends Activity{
 
 
 	}
-	
+
 	public void cd(String directori){
-		
-		
-		directoris = new Vector<String>();
-		
-		archivos = new Vector<String>();
-		
-		File path = new File(f+"/"+directori);
-		
-		f=path;
-		
-		File[] listfiles;
 
-		listfiles = path.listFiles();
-		int i = 0;
+		try{
+			directoris = new Vector<String>();
 
+			archivos = new Vector<String>();
 
-		while(i<listfiles.length)
-		{
+			File path = new File(f+"/"+directori);
 
-			if(listfiles[i].isDirectory()){
+			f=path;
 
-				directoris.add(listfiles[i].getName());
+			File[] listfiles;
+
+			listfiles = path.listFiles();
+			int i = 0;
 
 
+			while(i<listfiles.length)
+			{
+
+				if(listfiles[i].isDirectory()){
+
+					directoris.add(listfiles[i].getName());
+
+
+				}
+				else{
+					archivos.add(listfiles[i].getName());		
+
+				}
+				i++;
 			}
-			else{
-				archivos.add(listfiles[i].getName());		
 
-			}
-			i++;
+			recargaVista(archivos,directoris);
+
+		}catch(Exception e){
+
+			Toast t1 = Toast.makeText(getApplicationContext(),"El directorio seleccionado está vacio",Toast.LENGTH_LONG);
+			t1.show();
+
 		}
-		
-		recargaVista(archivos,directoris);
-		
+
 	}
-		
-	
+
+
 	public void recargaVista(final Vector<String> archivos,  final Vector<String> directoris){
 
 		arraytipo = new ArrayList<Tipo>();
@@ -250,7 +264,7 @@ public class Envia extends Activity{
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,long arg3) {
 
-			
+
 				if (arg2<directoris.size()){				
 
 					cd(directoris.get(arg2));
@@ -284,12 +298,10 @@ public class Envia extends Activity{
 		});
 
 	}
-	
-	public void sendFile(String fichero){
-		
-		
 
-		
+	public void sendFile(String fichero){
+
+
 		try {
 
 			boolean enviadoUltimo=false;
@@ -302,82 +314,130 @@ public class Envia extends Activity{
 			mensaje.setPath(fichero);
 			oos.writeObject(mensaje);
 
-			
+
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
 
 			Object mensaje2 = ois.readObject();
 
-	
+
 			if (mensaje2 instanceof Message){
 
-		
+
 				if (((Message) mensaje2).getOrden().equals("SgetFile")){
-						
-					
-					is = new FileInputStream(f+"/"+fichero);
-		
+
+
+					final File file =new File(f+"/"+fichero);
+
+					FileInputStream is = new FileInputStream(f+"/"+fichero);
 					// Se instancia y rellena un mensaje de envio de fichero
 					Files files = new Files();
-				
 					files.setNombreFichero(((Message) mensaje2).getPath()+"/"+fichero);
-			
-					
-					int leidos = is.read(files.getContenidoFichero());
-
-					// Bucle mientras se vayan leyendo datos del fichero
-					while (leidos > -1)
-					{
-						
-						// Se rellena el número de bytes leidos
-						files.setBytesValidos(leidos);
-
-						// Si no se han leido el máximo de bytes, es porque el fichero
-						// se ha acabado y este es el último mensaje
-						if (leidos <Files.LONGITUD_MAXIMA)
-						{
-							// Se marca que este es el último mensaje
-							files.setUltimoMensaje(true);
-							enviadoUltimo=true;
-						}
-						else files.setUltimoMensaje(false);
 
 
-						oos.writeObject(files);
+					byte[] mybytearray = new byte[(int) file.length()]; //create a byte array to file
 
-						// Si es el último mensaje, salimos del bucle.
-						if (files.isUltimoMensaje())
-							break;
+					fileInputStream = new FileInputStream(file);
+					bufferedInputStream = new BufferedInputStream(fileInputStream); 
 
-						// Se crea un nuevo mensaje
-						files = new Files();
-						files.setNombreFichero(mensaje.getPath());
+					bufferedInputStream.read(mybytearray, 0, mybytearray.length); //read the file
 
-						// y se leen sus bytes.
-						leidos = is.read(files.getContenidoFichero());
-					}
+					outputStream = socket.getOutputStream();
 
-					if (enviadoUltimo==false)
-					{
-						files.setUltimoMensaje(true);
-						files.setBytesValidos(0);
-						oos.writeObject(files);
+					outputStream.write(mybytearray, 0, mybytearray.length); //write file to the output stream byte by byte
 
-					}
+					//1outputStream.flush();
+
+					bufferedInputStream.close();
+
+					// outputStream.close();
+
+					Toast t1 = Toast.makeText(getApplicationContext(),String.valueOf(socket.isConnected()),Toast.LENGTH_LONG);
+					t1.show();
 
 				}
 			}
+		}
+		catch (UnknownHostException e) {
+			e.printStackTrace();
 
-				//oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 
-			}catch(Exception e){
+			e.printStackTrace();
+		} catch(Exception e){
+
+		}	
+
+	}
 
 
-				Toast t2 = Toast.makeText(getApplicationContext(),e.getMessage()+" a",Toast.LENGTH_LONG);
-				t2.show();
+	public static void reiniciarActivity(Activity actividad){
+		Intent intent=new Intent();
+		intent.setClass(actividad, actividad.getClass());
+		//llamamos a la actividad
+		actividad.startActivity(intent);
+		//finalizamos la actividad actual
+		actividad.finish();
+	}
 
+	public void home(View arg){
+
+		reiniciarActivity(this);
+	}
+
+	public void back(View arg){
+
+
+		cdAnt(f.getParent());
+
+
+	}
+	public void cdAnt(String x){
+
+		try{	
+			if(!f.toString().equals("/")){
+
+
+				directoris = new Vector<String>();
+
+				archivos = new Vector<String>();
+
+				File path = new File(x);
+
+				f=path;
+
+				File[] listfiles;
+
+				listfiles = path.listFiles();
+				int i = 0;
+
+
+				while(i<listfiles.length)
+				{
+
+					if(listfiles[i].isDirectory()){
+
+						directoris.add(listfiles[i].getName());
+
+
+					}
+					else{
+						archivos.add(listfiles[i].getName());		
+
+					}
+					i++;
+				}
+
+				recargaVista(archivos,directoris);
 			}
-		
+
+		}catch(Exception e){
+
+
+		}
+
 	}
 
 }

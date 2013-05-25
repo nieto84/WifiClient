@@ -6,7 +6,7 @@
 
 
         <EditTextPreference
-            android:dialogTitle="Introduce valor"
+            android:dialogTitle="Introduce IP"
             android:key="ip"
             android:summary="Introduce aqui la ip a la que quieres conectarte"
             android:title="IP Address" />
@@ -15,9 +15,8 @@
 
     <PreferenceCategory android:title="Port" >
 
-
         <EditTextPreference
-            android:dialogTitle="Introduce valor"
+            android:dialogTitle="Introduce número de puerto"
             android:key="port"
             android:summary="Introduce aqui el puerto de conexion"
             android:title="Port" />
@@ -25,9 +24,10 @@
     
      <PreferenceCategory android:title="User" >
 
+         
 
         <EditTextPreference
-            android:dialogTitle="Introduce valor"
+            android:dialogTitle="Introduce usuario"
             android:key="user"
             android:summary="Introduce aqui el nombre de usuario"
             android:title="User" />
@@ -37,8 +37,9 @@
 
 
         <EditTextPreference
-            android:dialogTitle="Introduce valor"
+            android:dialogTitle="Introduce password"
             android:key="password"
+             android:password="true"
             android:summary="Introduce aqui la clave de acceso"
             android:title="Password" />
     </PreferenceCategory>

@@ -82,8 +82,6 @@ public class Recibe extends Activity{
 				Iterator<String> a = directoris.iterator();
 
 
-
-
 				while (a.hasNext()){
 
 					String dire = a.next();
@@ -135,7 +133,7 @@ public class Recibe extends Activity{
 			public void onItemClick(AdapterView<?> arg0, View arg1, final int arg2,long arg3) {
 
 
-		
+
 
 				if (arg2<directoris.size()){
 
@@ -395,7 +393,7 @@ public class Recibe extends Activity{
 
 		Toast t1 = Toast.makeText(getApplicationContext(),"Transferencia finalizada con éxito",Toast.LENGTH_LONG);
 		t1.show();
-			
+
 	}
 
 
